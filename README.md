@@ -23,9 +23,18 @@ Tested mostly on Xubuntu 20.04 LTS with XIM keyboard input method system
 
 Installation
 ------------
+### Automatically by using `make`
+* Make sure that `make` and `docker` are available on your machine:
+  `sudo apt-get install docker.io make`
+* Run `make install`
+* Create an application keyboard shortcut to call application
+  `xkblayout-convert` without arguments.
+
+
+### Manually
 * Install requirements.
-* Create an application keyboard shortcut to call `xkblayout-convert.sh` without
-  arguments.
+* Create an application keyboard shortcut to call file `xkblayout-convert.sh`
+  without arguments.
 
 
 Usage scenario
