@@ -7,7 +7,7 @@ correct one, e.g.:
     Руддщ   -(select the text and press shortcut)->  Hello
     Ghbdtn                                           Привет
 
-This script mostly repeats the `Shift+PrtSc` behaviour of `Punto Switcher`
+This script mostly repeats the `Shift+Pause` behaviour of the `Punto Switcher`
 utility.
 
 Requirements
@@ -27,14 +27,20 @@ Installation
 * Make sure that `make` and `docker` are available on your machine:
   `sudo apt-get install docker.io make`
 * Run `make install`
-* Create an application keyboard shortcut to call application
-  `xkblayout-convert` without arguments.
+
+> `Shift+Pause` will be bound to call `xkblayout-convert`.
 
 
 ### Manually
 * Install requirements.
 * Create an application keyboard shortcut to call file `xkblayout-convert.sh`
-  without arguments.
+  without arguments. You can do it in GUI preferences or by the following
+  command:
+  ```bash
+  # On XFCE:
+  xfconf-query -n -c xfce4-keyboard-shortcuts -p '/commands/custom/<Shift>Pause' -t string -s 'xkblayout-convert'
+  ```
+  This will bind `Shift+Pause` to call `xkblayout-convert`.
 
 
 Usage scenario

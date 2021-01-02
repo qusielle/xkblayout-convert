@@ -78,8 +78,19 @@ activate-sudo:
 	@sudo true
 
 
+.PHONY: install-shortcuts
+install-shortcuts:
+	@if [ "$$XDG_CURRENT_DESKTOP" = "XFCE" ]; then \
+		xfconf-query --create --channel xfce4-keyboard-shortcuts \
+			--property '/commands/custom/<Shift>Pause' --type string \
+			--set 'xkblayout-convert'; \
+	else \
+		echo 'Keyboard shortcut install is only supported in XFCE desktop.'; \
+	fi
+
+
 .PHONY: install
-install: install-xkblayout-convert clean
+install: install-xkblayout-convert install-shortcuts clean
 
 
 .PHONY: clean
