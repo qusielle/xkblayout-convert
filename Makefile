@@ -67,9 +67,14 @@ install-xkb-switch: xkb-switch/build/xkb-switch install-cmake activate-sudo
 	}
 
 
-.PHONY: install-xkblayout-convert
-install-xkblayout-convert: install-xdotool install-xkblayout-state install-xkb-switch
+# Just copy the script to the target directory.
+.PHONY: install-xkblayout-convert-script
+install-xkblayout-convert-script:
 	install -D -T xkblayout-convert.sh ~/.local/bin/xkblayout-convert
+
+
+.PHONY: install-xkblayout-convert
+install-xkblayout-convert: install-xdotool install-xkblayout-state install-xkb-switch install-xkblayout-convert-script
 
 
 .PHONY: activate-sudo
