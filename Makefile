@@ -89,6 +89,12 @@ install-shortcuts:
 		xfconf-query --create --channel xfce4-keyboard-shortcuts \
 			--property '/commands/custom/<Shift>Pause' --type string \
 			--set 'xkblayout-convert selected'; \
+		xfconf-query --create --channel xfce4-keyboard-shortcuts \
+			--property '/commands/custom/Pause' --type string \
+			--set 'xkblayout-convert word'; \
+		xfconf-query --create --channel xfce4-keyboard-shortcuts \
+			--property '/commands/custom/<Shift><Alt>Pause' --type string \
+			--set 'xkblayout-convert line'; \
 	else \
 		echo 'Keyboard shortcut install is only supported in XFCE desktop.'; \
 	fi

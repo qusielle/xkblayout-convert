@@ -48,15 +48,29 @@ convert_selected_text() {
 }
 
 
+convert_current_word() {
+    xdotool key ctrl+shift+Left
+    convert_selected_text
+}
+
+
+convert_current_line() {
+    xdotool key shift+Home
+    convert_selected_text
+}
+
+
 # Print the usage information message.
 print_help() {
     echo -ne "Russian <-> English (US) Keyboard layout switcher for the text in the input field.
 
 Usage:
-  $0 (selected|help|--help|-h)
+  $0 (line|selected|word|help|--help|-h)
 
 Arguments:
-  selected          Convert selected text to the opposite layout (ru->us, us->ru).
+  line              Convert all words on the line before the cursor.
+  selected          Convert selected text.
+  word              Convert a word before the cursor.
   help|--help|-h    Print this help message.
 "
 }
@@ -66,8 +80,12 @@ main() {
     local -r arg=$1
     local function_to_run
 
-    if [[ $arg == 'selected' ]]; then
+    if [[ $arg == 'line' ]]; then
+        function_to_run='convert_current_line'
+    elif [[ $arg == 'selected' ]]; then
         function_to_run='convert_selected_text'
+    elif [[ $arg == 'word' ]]; then
+        function_to_run='convert_current_word'
     elif [[ $arg == 'help' ]] || [[ $arg == '--help' ]] || [[ $arg == '-h' ]]; then
         print_help
         return
