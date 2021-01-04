@@ -88,7 +88,7 @@ install-shortcuts:
 	@if [ "$$XDG_CURRENT_DESKTOP" = "XFCE" ]; then \
 		xfconf-query --create --channel xfce4-keyboard-shortcuts \
 			--property '/commands/custom/<Shift>Pause' --type string \
-			--set 'xkblayout-convert'; \
+			--set 'xkblayout-convert selected'; \
 	else \
 		echo 'Keyboard shortcut install is only supported in XFCE desktop.'; \
 	fi

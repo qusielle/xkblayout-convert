@@ -47,9 +47,37 @@ convert_selected_text() {
     fi
 }
 
-main() {
-    wait_for_keys_released
-    convert_selected_text
+
+# Print the usage information message.
+print_help() {
+    echo -ne "Russian <-> English (US) Keyboard layout switcher for the text in the input field.
+
+Usage:
+  $0 (selected|help|--help|-h)
+
+Arguments:
+  selected          Convert selected text to the opposite layout (ru->us, us->ru).
+  help|--help|-h    Print this help message.
+"
 }
 
-main
+
+main() {
+    local -r arg=$1
+    local function_to_run
+
+    if [[ $arg == 'selected' ]]; then
+        function_to_run='convert_selected_text'
+    elif [[ $arg == 'help' ]] || [[ $arg == '--help' ]] || [[ $arg == '-h' ]]; then
+        print_help
+        return
+    else
+        print_help >&2
+        exit 1
+    fi
+
+    wait_for_keys_released
+    $function_to_run
+}
+
+main "$1"

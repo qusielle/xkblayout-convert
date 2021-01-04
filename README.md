@@ -28,19 +28,19 @@ Installation
   `sudo apt-get install docker.io make`
 * Run `make install`
 
-> `Shift+Pause` will be bound to call `xkblayout-convert`.
+> `Shift+Pause` will be bound to call `xkblayout-convert selected`.
 
 
 ### Manually
 * Install requirements.
 * Create an application keyboard shortcut to call file `xkblayout-convert.sh`
-  without arguments. You can do it in GUI preferences or by the following
+  with `selected` argument. You can do it in GUI preferences or by the following
   command:
   ```bash
   # On XFCE:
-  xfconf-query -n -c xfce4-keyboard-shortcuts -p '/commands/custom/<Shift>Pause' -t string -s 'xkblayout-convert'
+  xfconf-query -n -c xfce4-keyboard-shortcuts -p '/commands/custom/<Shift>Pause' -t string -s 'xkblayout-convert selected'
   ```
-  This will bind `Shift+Pause` to call `xkblayout-convert`.
+  This will bind `Shift+Pause` to call `xkblayout-convert selected`.
 
 
 Usage scenario
