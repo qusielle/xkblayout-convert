@@ -16,6 +16,11 @@ endef
 
 check-presence = type $(1) >/dev/null 2>&1
 
+xfconf-query-template-xfce4 = \
+	xfconf-query --create --channel xfce4-keyboard-shortcuts \
+	--property '/commands/custom/$(1)' --type string \
+	--set 'xkblayout-convert $(2)';
+
 define install-dependency-target
 .PHONY: install-$(1)
 install-$(1): activate-sudo
@@ -86,15 +91,9 @@ activate-sudo:
 .PHONY: install-shortcuts
 install-shortcuts:
 	@if [ "$$XDG_CURRENT_DESKTOP" = "XFCE" ]; then \
-		xfconf-query --create --channel xfce4-keyboard-shortcuts \
-			--property '/commands/custom/<Shift>Pause' --type string \
-			--set 'xkblayout-convert selected'; \
-		xfconf-query --create --channel xfce4-keyboard-shortcuts \
-			--property '/commands/custom/Pause' --type string \
-			--set 'xkblayout-convert word'; \
-		xfconf-query --create --channel xfce4-keyboard-shortcuts \
-			--property '/commands/custom/<Shift><Alt>Pause' --type string \
-			--set 'xkblayout-convert line'; \
+		$(call xfconf-query-template-xfce4,<Shift>Pause,selected) \
+		$(call xfconf-query-template-xfce4,Pause,word) \
+		$(call xfconf-query-template-xfce4,<Shift><Alt>Pause,line) \
 	else \
 		echo 'Keyboard shortcut install is only supported in XFCE desktop.'; \
 	fi
