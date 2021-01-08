@@ -24,7 +24,7 @@ xfconf-query-template-xfce4 = \
 define install-dependency-target
 .PHONY: install-$(1)
 install-$(1): activate-sudo
-	$(call check-presence,$(1)) || sudo apt install $(1)
+	$(call check-presence,$(1)) || sudo apt install -y $(1)
 endef
 
 .PHONY: all
@@ -60,14 +60,14 @@ xkb-switch/build/xkb-switch: $(DOCKER_TAG_FILE)
 	git clone $(XKB_SWITCH_URL)
 	mkdir -p xkb-switch/build
 	docker run -v "$$PWD":"$$PWD" -i -u $(UID):$(GID) --rm $$(cat $(DOCKER_TAG_FILE)) \
-		/bin/sh -c 'cmake -B "'"$$PWD"'"/xkb-switch/build -S "'"$$PWD"'"/xkb-switch; make -C "'"$$PWD"'"/xkb-switch/build'
+		/bin/sh -c 'cd "'"$$PWD"'"/xkb-switch/build && cmake .. && make'
 
 
 .PHONY: install-xkb-switch
 install-xkb-switch: xkb-switch/build/xkb-switch install-cmake activate-sudo
 	@$(call check-presence,xkb-switch) || { \
 		echo Installing xkb-switch...; \
-		sudo $(MAKE) -C xkb-switch/build install; \
+		sudo $(MAKE) -C xkb-switch/build install && \
 		sudo ldconfig; \
 	}
 
