@@ -30,33 +30,32 @@ wait_for_keys_released() {
 # * Translate characters from current layout to opposite.
 # * Type converted text.
 # * Switch keyboard layout to opposite.
-convert_selected_text() {
+convert_selected() {
+    local from to new_layout
+    local -r current_layout=$(xkblayout-state print '%n')
+    case $current_layout in
+        English) from=$en_layout; to=$ru_layout; new_layout='ru';;
+        Russian) from=$ru_layout; to=$en_layout; new_layout='us';;
+        \?) return 1;;
+    esac
+
     xdotool key ctrl+Insert
     local -r clipboard_text=$(xclip -o)
-    local -r current_layout=$(xkblayout-state print '%n')
-
-    local translated_text
-    if [[ $current_layout == English ]]; then
-        translated_text=$(sed -e "y/$en_layout/$ru_layout/" <<<"$clipboard_text")
-        xdotool type "$translated_text"
-        xkb-switch -s ru
-    elif [[ $current_layout == Russian ]]; then
-        translated_text=$(sed -e "y/$ru_layout/$en_layout/" <<<"$clipboard_text")
-        xdotool type "$translated_text"
-        xkb-switch -s us
-    fi
+    local -r translated_text=$(sed -e "y/$from/$to/" <<<"$clipboard_text")
+    xdotool type "$translated_text"
+    xkb-switch -s "$new_layout"
 }
 
 
-convert_current_word() {
+convert_word() {
     xdotool key ctrl+shift+Left
-    convert_selected_text
+    convert_selected
 }
 
 
-convert_current_line() {
+convert_line() {
     xdotool key shift+Home
-    convert_selected_text
+    convert_selected
 }
 
 
@@ -78,24 +77,17 @@ Arguments:
 
 main() {
     local -r arg=$1
-    local function_to_run
 
-    if [[ $arg == 'line' ]]; then
-        function_to_run='convert_current_line'
-    elif [[ $arg == 'selected' ]]; then
-        function_to_run='convert_selected_text'
-    elif [[ $arg == 'word' ]]; then
-        function_to_run='convert_current_word'
-    elif [[ $arg == 'help' ]] || [[ $arg == '--help' ]] || [[ $arg == '-h' ]]; then
-        print_help
-        return
-    else
+    if [[ $# -gt 1 ]]; then
         print_help >&2
-        exit 1
+        return 1
     fi
 
-    wait_for_keys_released
-    $function_to_run
+    case $arg in
+        help|--help|h) print_help;;
+        line|selected|word) wait_for_keys_released; convert_$arg;;
+        \?) print_help >&2; return 1;;
+    esac
 }
 
-main "$1"
+main "$@"
